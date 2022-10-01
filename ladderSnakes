@@ -1,0 +1,152 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define endl "\n"
+#define int long int
+
+
+//entities
+class Player{
+public:
+    string name;
+    int position;
+    Player(){
+        this->position = 0;
+    }
+    void setName(string name){
+        this->name = name;
+    }
+    string getName(){
+        return this->name;
+    }
+    void setPosition(int position){
+        this->position = position;
+    }
+    int getPosition(){
+        return this->position;
+    }
+};
+
+class Board{
+public:
+    int cells;
+    map<int,int>snakes;
+    map<int,int>ladders;
+    Board(){
+        this->cells = 100;
+    }
+
+    void setSnakeTail(int head, int tail){
+        this->snakes[head] = tail;
+    }
+    int getSnakeTail(int head){
+        if(this->snakes[head]) return this->snakes[head];
+        else return head;
+    }
+
+    void setLadderEnd(int start, int end){
+        this->ladders[start] = end;
+    }
+    int getLadderEnd(int start){
+        if(this->ladders[start]) return this->ladders[start];
+        else return start;
+    }
+
+};
+
+
+//services
+int finalPosition(Board board, Player &player, int dice){
+    int newPosition = player.getPosition() + dice;
+    //Is it valid to make the move
+    if(newPosition > board.cells){
+        return player.getPosition();
+    }
+
+    //check if we reached to final position
+    if(newPosition == board.cells){
+        player.setPosition(100);
+        return 100;
+    }
+
+    //ladders/ snakes
+    while(board.getSnakeTail(newPosition) != newPosition  ||  board.getLadderEnd(newPosition) != newPosition){
+        if(board.getSnakeTail(newPosition) != newPosition){
+            newPosition = board.getSnakeTail(newPosition);
+        }
+        else{
+            newPosition = board.getLadderEnd(newPosition);
+        }
+    }
+    //update the position
+    player.setPosition(newPosition);
+    return newPosition;
+
+}
+
+
+int32_t main(){
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+#endif
+    IOS;
+// ######### Cook_your_code_here #########
+    Board board;
+
+    int numberOfSnakes;
+    cin>>numberOfSnakes;
+    while(numberOfSnakes--){
+        int head;
+        int tail;
+        cin>>head>>tail;
+        board.setSnakeTail(head, tail);
+    }
+
+    int numberOfLadders;
+    cin>>numberOfLadders;
+    while(numberOfLadders--){
+        int start;
+        int end;
+        cin>>start>>end;
+        board.setLadderEnd(start, end);
+    }
+
+    int numberOfPlayers;
+    cin>>numberOfPlayers;
+    queue<Player>q;
+    while(numberOfPlayers--){
+        string nameOfPlayer;
+        cin>>nameOfPlayer;
+        Player player;
+        player.setName(nameOfPlayer);
+        q.push(player);
+    }
+
+    
+
+    int times = 10;
+    while(times--){
+        int dice = rand()%6 + 1;
+        cout<<"dice : "<<dice<<endl;
+        auto curPlayer = q.front();
+        q.pop();
+        
+
+        int curPosition = finalPosition(board, curPlayer, dice);
+        q.push(curPlayer);
+        cout<<curPlayer.getName()<<" "<<curPosition<<endl;
+        if(curPosition == 100){
+            cout<<curPlayer.getName()<<" "<<"wins"<<endl;
+            break;
+        }
+        cout<<endl;
+
+    }
+
+    
+    return 0;
+}
+
+
+
+
