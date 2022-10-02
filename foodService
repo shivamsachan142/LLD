@@ -1,0 +1,62 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define endl "\n"
+#define int long long
+
+
+
+class Dish{
+public:
+    string name;
+    int price;
+    string cuisine;
+
+    void setName(string name) this->name = name;
+    void setPrice(int price) this->price = price;
+    void setCuisine(string cuisine) this->cuisine = cuisine;
+
+    string getName() return this->name;
+    int getPrice() return this->price;
+    string getCuisine() return this->cuisine;
+};
+
+class Restaurant{
+public:
+    string name;
+    string place;
+    vector<Dish>foodMenu;
+    int location;
+
+    void setLocation(string name) this->location = location;
+    string getLocation() return this->location;
+
+    void setName(string name) this->name = name;
+    string getName() return this->name;
+
+    void setPlace(string name) this->place = place;
+    string getPlace() return this->place;
+
+    void addDish(Dish dish){
+        this->foodMenu.push_back(dish);
+    }
+    vector<Dish> getDishes() return this->foodMenu;
+};
+
+vector<Restaurant>listOfRestaurants;
+
+
+
+
+int32_t main(){
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+#endif
+    IOS;
+// ######### Cook_your_code_here #########
+    
+
+    vector<Dish>A;
+    return 0;
+}
