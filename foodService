@@ -6,7 +6,6 @@ using namespace std;
 #define int long long
 
 
-
 class Dish{
 public:
     string name;
@@ -25,29 +24,95 @@ public:
 class Restaurant{
 public:
     string name;
-    string place;
+    string city;
     vector<Dish>foodMenu;
     int location;
-
-    void setLocation(string name) this->location = location;
-    string getLocation() return this->location;
 
     void setName(string name) this->name = name;
     string getName() return this->name;
 
-    void setPlace(string name) this->place = place;
-    string getPlace() return this->place;
+    void setCity(string city) this->city = city;
+    string getCity() return this->city;
 
-    void addDish(Dish dish){
-        this->foodMenu.push_back(dish);
-    }
+    void addDish(Dish dish) this->foodMenu.push_back(dish);
     vector<Dish> getDishes() return this->foodMenu;
+
+    void setLocation(int location) this->location = location;
+    int getLocation() return this->location;
 };
 
 vector<Restaurant>listOfRestaurants;
 
+class Cart{
+public:
+    vector<Dish>foodItems;
+    int totalFoodItemsCost;
+    Cart(){
+        totalFoodItemsCost = 0;
+    }
+    bool addItemInCart(Dish dish){
+        this->foodItems.push_back(dish);
+        this->totalFoodItemsCost += dish.price;
+        return true;
+    }
+    bool removeItemInCart(Dish dish){
+        int numberOfItems = this->foodItems.size();
+        for(int i=0; i<numberOfItems; i++){
+            Dish dishInCart = this->foodItems[i];
+            if(dishInCart.price == dish.price && dishInCart.name == dish.name && dishInCart.cuisine == dish.cuisine){
+                swap(this->foodItems[i], this->foodItems[numberOfItems-1]);
+                this->totalFoodItemsCost -= this->foodItems[numberOfItems-1].price;
+                this->foodItems.pop_back();
+                return true;
+                // break;
+            }
+        }
+    }
+};
 
 
+class User{
+public:
+    string name;
+    Cart cart;
+    void setName(string name) this->name = name;
+    string getName() return this->name;
+
+    bool addItem(Dish dish) return this->cart.addItemInCart(dish);
+    bool RemoveItem(Dish dish) return this->cart.removeItemInCart(dish);
+    Cart getCart() return this->cart;
+    
+
+};
+
+map<string,Cart>orders;
+class Order{
+public:
+    // User user;
+    bool checkOut(User user){
+        if(user.cart.foodItems.size() == 0) return false; //cart is empty for this user
+        orders[user.name] = user.cart;
+        return true;
+    }
+    bool cancelOrder(User user){
+        if(orders[user.name]){
+            orders[user.name]--;
+            return true;
+        }
+        else return false; //no order by this user
+    }
+}
+
+
+
+
+//services
+1. search Restaurant by city and name
+2. Add Dish or update
+3. Search Restaurant by cuisine type
+4. user add, remove, getCart
+5. place order
+6. 
 
 int32_t main(){
 #ifndef ONLINE_JUDGE
