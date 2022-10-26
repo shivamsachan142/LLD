@@ -6,19 +6,33 @@ using namespace std;
 #define int long long
 
 
+
+
 class Dish{
 public:
     string name;
     int price;
     string cuisine;
 
-    void setName(string name) this->name = name;
-    void setPrice(int price) this->price = price;
-    void setCuisine(string cuisine) this->cuisine = cuisine;
+    void setName(string name){
+        this->name = name;
+    }
+    void setPrice(int price){
+        this->price = price;
+    }
+    void setCuisine(string cuisine){
+        this->cuisine = cuisine;
+    }
 
-    string getName() return this->name;
-    int getPrice() return this->price;
-    string getCuisine() return this->cuisine;
+    string getName(){
+        return this->name;
+    }
+    int getPrice(){
+        return this->price;
+    }
+    string getCuisine(){
+        return this->cuisine;
+    }
 };
 
 class Restaurant{
@@ -28,20 +42,37 @@ public:
     vector<Dish>foodMenu;
     int location;
 
-    void setName(string name) this->name = name;
-    string getName() return this->name;
+    void setName(string name){
+        this->name = name;
+    }
+    string getName(){
+        return this->name;
+    }
 
-    void setCity(string city) this->city = city;
-    string getCity() return this->city;
+    void setCity(string city){
+        this->city = city;
+    }
+    string getCity(){
+        return this->city;
+    }
 
-    void addDish(Dish dish) this->foodMenu.push_back(dish);
-    vector<Dish> getDishes() return this->foodMenu;
+    void addDish(Dish dish){
+        this->foodMenu.push_back(dish);
+    }
+    vector<Dish> getDishes(){
+        return this->foodMenu;
+    }
 
-    void setLocation(int location) this->location = location;
-    int getLocation() return this->location;
+    void setLocation(int location){
+        this->location = location;
+    }
+    int getLocation(){
+        return this->location;
+    }
 };
 
 vector<Restaurant>listOfRestaurants;
+
 
 class Cart{
 public:
@@ -67,52 +98,62 @@ public:
                 // break;
             }
         }
+        return false;
     }
 };
 
+map<string,Cart>orders;
 
 class User{
 public:
     string name;
-    Cart cart;
-    void setName(string name) this->name = name;
-    string getName() return this->name;
+    Cart userCart;
+    void setName(string name){
+        this->name = name;
+    }
+    string getName(){
+        return this->name;
+    }
 
-    bool addItem(Dish dish) return this->cart.addItemInCart(dish);
-    bool RemoveItem(Dish dish) return this->cart.removeItemInCart(dish);
-    Cart getCart() return this->cart;
-    
-
+    bool addItem(Dish dish){
+        return this->userCart.addItemInCart(dish);
+    }
+    bool RemoveItem(Dish dish){
+        return this->userCart.removeItemInCart(dish);
+    }
+    Cart getCart(){
+        return this->userCart;
+    }
 };
 
-map<string,Cart>orders;
+
 class Order{
 public:
     // User user;
     bool checkOut(User user){
-        if(user.cart.foodItems.size() == 0) return false; //cart is empty for this user
-        orders[user.name] = user.cart;
+        if(user.userCart.foodItems.size() == 0) return false; //cart is empty for this user
+        orders[user.name] = user.userCart;
         return true;
     }
     bool cancelOrder(User user){
-        if(orders[user.name]){
-            orders[user.name]--;
+        if(orders.find(user.name) != orders.end()){
+            Cart emptyCart;
+            orders[user.name] = emptyCart;
             return true;
         }
         else return false; //no order by this user
     }
-}
-
+};
 
 
 
 //services
-1. search Restaurant by city and name
-2. Add Dish or update
-3. Search Restaurant by cuisine type
-4. user add, remove, getCart
-5. place order
-6. 
+// 1. search Restaurant by city and name
+// 2. Add Dish or update
+// 3. Search Restaurant by cuisine type
+// 4. user add, remove, getCart
+// 5. place order
+// 6. 
 
 int32_t main(){
 #ifndef ONLINE_JUDGE
@@ -123,5 +164,53 @@ int32_t main(){
     
 
     vector<Dish>A;
+    string name;
+    string city;
+    vector<Dish>foodMenu;
+    int location;
+
+    Restaurant restaurant;
+    restaurant.name = "zaatar";
+    restaurant.city = "BNG";
+    restaurant.location = 1;
+
+    
+
+    string name;
+    int price;
+    string cuisine;
+
+    Dish paneer;
+    paneer.name = "paneer";
+    paneer.price = 250;
+    paneer.cuisine = "Indian";
+
+    Dish chicken;
+    chicken.name = "chicken";
+    chicken.price = 300;
+    chicken.cuisine = "Muglai";
+
+    restaurant.foodMenu.push_back(paneer);
+    restaurant.foodMenu.push_back(chicken);
+
+    listOfRestaurants.push_back(restaurant);
+
+
+    // string name;
+    Cart cart;
+
+    User shivam;
+    shivam.name = "shivam";
+
+    // vector<Dish>foodItems;
+    // int totalFoodItemsCost;
+
+    cart.foodItems.push_back(paneer);
+    cart.foodItems.push_back(chicken);
+    cart.totalFoodItemsCost = 550;
+
+    shivam.userCart = cart;
+
+
     return 0;
 }
