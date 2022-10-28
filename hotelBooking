@@ -1,0 +1,126 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define endl "\n"
+#define int long long
+
+class User{
+public:
+    int id;
+    string name;
+
+    User();
+
+    void setId(int id){
+        this->id = id;
+    }
+    int getId(){
+        return this->id;
+    }
+
+    void setName(string name){
+        this->name = name;
+    }
+    string getName(){
+        return this->name;
+    }
+};
+
+class Room{
+public:
+    int id;
+    string type;
+    int cost;
+
+    Room();
+
+    void setId(int id){
+        this->id = id;
+    }
+    int getId(){
+        return this->id;
+    }
+
+    void setType(string type){
+        this->type = type;
+    }
+    string getType(){
+        return this->type;
+    }
+
+};
+
+class Hotel{
+public:
+    int id;
+    string name;
+    string city;
+    vector<Room>listOfRooms;
+
+    Hotel();
+
+    void setId(int id){
+        this->id = id;
+    }
+    int getId(){
+        return this->id;
+    }
+
+    void setName(string name){
+        this->name = name;
+    }
+    string getName(){
+        return this->name;
+    }
+
+    void setCity(string city){
+        this->city = city;
+    }
+    string getCity(){
+        return this->city;
+    }
+
+    void addRoom(Room room){
+        this->listOfRooms.push_back(room);
+    }
+    vector<Room> getRooms(){
+        return this->listOfRooms;
+    }
+};
+
+// bookingId, userId, 1
+// bookingId, userId, 2
+// bookingId, userId, 3
+// bookingId, userId, 4
+
+
+
+class Booking{
+
+};
+
+
+
+int32_t main(){
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+#endif
+    IOS;
+// ######### Cook_your_code_here #########
+    //1. admin can  add, delete hotel
+    //2. user can book, cancel the hotel
+    //3. user add, delete profile
+    //4. user search by location, name, cityName
+    mp[0] = 1;
+    int sum = 0;
+    int ans = 0;
+    for(int i=0; i<n; i++){
+        sum += A[i];
+        int check = sum - k;
+        ans += mp[check];
+        mp[sum]++;
+    }
+
+    return 0;
+}
