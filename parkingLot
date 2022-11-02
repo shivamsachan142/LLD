@@ -1,0 +1,253 @@
+
+#include <bits/stdc++.h>
+using namespace std;
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define endl "\n"
+// #define int long long
+
+// class Slot{
+// public:
+//     int slotID;
+
+//     void se
+// };
+
+// class Floor{
+// public:
+//     int floorID;
+//     vector<Slot> slotLists;
+// };
+
+class Vehicle{
+public:
+    string registrationNumber;
+    string color;
+    string vehicleType;
+
+    void setRegistrationNumber(string registrationNumber){
+        this->registrationNumber = registrationNumber;
+    }
+    string getRegistrationNumber(){
+        return this->registrationNumber;
+    }
+
+    void setColor(string color){
+        this->color = color;
+    }
+    string getColor(){
+        return this->color;
+    }
+
+    void setVehicleType(string vehicleType){
+        this->vehicleType = vehicleType;
+    }
+    string getVehicleType(){
+        return this->vehicleType;
+    }
+};
+
+class ParkingLot{
+public:
+    string parkingLotId;
+    int floors;
+    int slots;
+    
+    void setParkingId(string parkingLotId){
+        this->parkingLotId = parkingLotId;
+    }
+    string getParkingId(){
+        return this->parkingLotId;
+    }
+
+    void setFloors(int floors){
+        this->floors = floors;
+    }
+    int getFloors(){
+        return this->floors;
+    }
+
+    void setSlots(int slots){
+        this->slots = slots;
+    }
+    int getSlots(){
+        return this->slots;
+    }
+};
+
+class Booking{
+public:
+    int id;
+
+    void setId(int id){
+        this->id = id;
+    }
+    int getId(){
+        return this->id;
+    }
+
+};
+
+map<string,Vehicle> bookingStatus;
+//services
+ParkingLot createParkingLot(string parkingLotId, int floors, int slots){
+    ParkingLot parkingLot;
+
+    parkingLot.setParkingId(parkingLotId);
+    parkingLot.setFloors(floors);
+    parkingLot.setSlots(slots);
+
+    return parkingLot;
+}
+
+void parkVehicle(string vehicleType, string registrationNumber, string color, ParkingLot parkingLot){
+
+    Vehicle vehicle;
+    vehicle.setRegistrationNumber(registrationNumber);
+    vehicle.setVehicleType(vehicleType);
+    vehicle.setColor(color);
+
+    bool flag = false;
+
+
+    
+    for(int floor=1; floor<(parkingLot.getFloors()); floor++){
+        for(int slot=1; slot<(parkingLot.getSlots()); slot++){
+            string ticketId = "PR1234_" + to_string(floor) + "_" + to_string(slot);
+            // 1 truck
+            // 2 3 bikes
+
+            if(slot == 1 && vehicleType == "Truck"){
+                if(bookingStatus.find(ticketId) == bookingStatus.end()){
+                    bookingStatus[ticketId] = vehicle;
+                    cout<<"Parked vehicle. Ticket ID:"<<ticketId<<endl;
+                    flag = true;
+                    // return;
+                    // return ticketId;
+                }
+            }
+            else if(slot == 2 && slot == 3 && vehicleType == "Bike"){
+                if(bookingStatus.find(ticketId) == bookingStatus.end()){
+                    bookingStatus[ticketId] = vehicle;
+                    cout<<"Parked vehicle. Ticket ID:"<<ticketId<<endl;
+                    flag = true;
+                    // return;
+                    // return ticketId;
+                }
+            }
+            else if(slot > 3 && vehicleType == "Car"){
+                if(bookingStatus.find(ticketId) == bookingStatus.end()){
+                    bookingStatus[ticketId] = vehicle;
+                    cout<<"Parked vehicle. Ticket ID:"<<ticketId<<endl;
+                    flag = true;
+                    // return;
+                    // return ticketId;
+                }
+            }
+            if(flag) break;
+        }
+        if(flag) break;
+    }
+
+    if(flag == false){
+        cout<<"Parking Lot Full"<<endl;
+    }
+}
+
+void unParkVehicle(string ticketId){
+    
+    if(bookingStatus.find(ticketId) != bookingStatus.end()){
+        Vehicle vehicle = bookingStatus[ticketId];
+        cout<<"unparked vehicle with registrationNumber : "<<vehicle.getRegistrationNumber()<<", and color : "<<vehicle.getColor()<<endl;
+        bookingStatus.erase(ticketId);
+    }
+    else{
+        cout<<"Invalid Ticket"<<endl;
+    }
+}
+
+void display(string typeOfDisplay, string vehicleType, ParkingLot parkingLot){
+
+    int freeCount = 0;
+    vector<pair<int,int>> freeSlots;
+    vector<pair<int,int>> occupiedSlots;
+
+    for(int floor=1; floor<=(parkingLot.getFloors()); floor++){
+        for(int slot=1; slot<=(parkingLot.getSlots()); slot++){
+            string ticketId = "PR1234_" + to_string(floor) + "_" + to_string(slot);
+            // 1 truck
+            // 2 3 bikes
+
+            if(slot == 1 && vehicleType == "Truck"){
+                if(bookingStatus.find(ticketId) == bookingStatus.end()){
+                    freeCount++;
+                    freeSlots.push_back({floor,slot});
+                }
+                else{
+                    occupiedSlots.push_back({floor,slot});
+                }
+            }
+            else if((slot == 2 || slot == 3) && vehicleType == "Bike"){
+                if(bookingStatus.find(ticketId) == bookingStatus.end()){
+                    freeCount++;
+                    freeSlots.push_back({floor,slot});
+                }
+                else{
+                    occupiedSlots.push_back({floor,slot});
+                }
+            }
+            else if(slot > 3 && vehicleType == "Car"){
+                if(bookingStatus.find(ticketId) == bookingStatus.end()){
+                    freeCount++;
+                    freeSlots.push_back({floor,slot});
+                }
+                else{
+                    occupiedSlots.push_back({floor,slot});
+                }
+            }
+        }
+    }
+
+    if(typeOfDisplay == "freeCount"){
+        cout<<"display free_count for "<<vehicleType<<" : "<<freeCount<<endl;
+    }
+    else if(typeOfDisplay == "freeSlots"){
+        cout<<"display free_slots for : "<<vehicleType<<endl;
+        if(freeSlots.size() == 0) cout<<"No free slots available"<<endl;
+        for(int i=0; i<freeSlots.size(); i++){
+            cout<<"Floor : "<<freeSlots[i].first<<" , Slot : "<<freeSlots[i].second<<endl;
+        }
+    }
+    else if(typeOfDisplay == "occupiedSlots"){
+        cout<<"display occupied_slots for : "<<vehicleType<<endl;
+        if(occupiedSlots.size() == 0) cout<<"No occupiedSlots found"<<endl;
+        for(int i=0; i<occupiedSlots.size(); i++){
+            cout<<"Floor : "<<occupiedSlots[i].first<<" , Slot : "<<occupiedSlots[i].second<<endl;
+        }
+    }
+}
+
+int32_t main(){
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+#endif
+    IOS;
+// ######### Cook_your_code_here #########
+
+    auto parkLot = createParkingLot("PR1234", 2, 6);
+    // cout<<parkLot.getFloors()<<endl;
+    // cout<<parkLot.getSlots()<<endl;
+    
+    display("freeCount", "Car", parkLot);
+    display("freeSlots", "Car", parkLot);
+    display("occupiedSlots", "Car", parkLot);
+
+    parkVehicle("Car", "KA-01-DB-1234", "black", parkLot);
+    display("occupiedSlots", "Car", parkLot);
+    unParkVehicle("PR1234_1_4");
+    display("occupiedSlots", "Car", parkLot);
+
+    // display occupied_slots CAR
+    // display free_slots CAR
+
+    return 0;
+}
