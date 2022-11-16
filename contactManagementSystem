@@ -1,0 +1,260 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define IOS ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#define endl "\n"
+#define int long long
+
+
+enum SearchField {FIRST_NAME, LAST_NAME, PHONE};
+
+enum SearchType {COMPLETE, PARTIAL};
+
+class Contact{
+    string firstName;
+    string lastName;
+    string phone;
+
+public:
+
+    Contact(){
+        this->firstName = "";
+        this->lastName = "";
+        this->phone = "";
+    }
+
+
+    void setFirstName(string firstName){
+        this->firstName = firstName;
+    }
+    string getFirstName(){
+        return this->firstName;
+    }
+
+    void setLastName(string lastName){
+        this->lastName = lastName;
+    }
+    string getLastName(){
+        return this->lastName;
+    }
+
+    void setPhone(string phone){
+        this->phone = phone;
+    }
+    string getPhone(){
+        return this->phone;
+    }
+};
+
+map<string, Contact>contactDictionary;
+
+class SearchResponse{
+public:
+    int totalCount;
+    vector<Contact> results;
+
+    SearchResponse(){
+        this->totalCount = 0;
+    }
+
+    void getSearchResponse(SearchType searchType, SearchField searchField, string input){
+        int lenOfInput = input.size();
+        for(auto itr : contactDictionary){
+            string id = itr.first;
+            Contact contact = itr.second;
+
+            switch(searchType){
+                case COMPLETE:
+                    switch(searchField){
+                        case FIRST_NAME:
+                            if(contact.getFirstName() == input){
+                                this->results.push_back(contact);
+                                this->totalCount++;
+                            }
+                            break;
+                        case LAST_NAME:
+                            if(contact.getLastName() == input){
+                                this->results.push_back(contact);
+                                this->totalCount++;
+                            }
+                            break;
+                        case PHONE:
+                            if(contact.getPhone() == input){
+                                this->results.push_back(contact);
+                                this->totalCount++;
+                            }
+                            break;
+                        default:
+                            cout<<"searchField should be FIRST_NAME/LAST_NAME/PHONE"<<endl;
+                    }
+                    break;
+                case PARTIAL:
+                    switch(searchField){
+                        case FIRST_NAME:
+                            if(contact.getFirstName().substr(0, lenOfInput) == input){
+                                this->results.push_back(contact);
+                                this->totalCount++;
+                            }
+                            break;
+                        case LAST_NAME:
+                            if(contact.getLastName().substr(0, lenOfInput) == input){
+                                this->results.push_back(contact);
+                                this->totalCount++;
+                            }
+                            break;
+                        case PHONE:
+                            if(contact.getPhone().substr(0, lenOfInput) == input){
+                                this->results.push_back(contact);
+                                this->totalCount++;
+                            }
+                            break;
+                        default:
+                            cout<<"searchField should be FIRST_NAME/LAST_NAME/PHONE"<<endl;
+                    }
+                    break;
+                default:
+                    cout<<"searchType should be COMPLETE/PARTIAL"<<endl;
+            }
+
+            // if(searchType == "COMPLETE"){
+            //     if(searchField == "FIRST_NAME"){
+            //         if(contact.getFirstName() == input){
+            //             this->results.push_back(contact);
+            //             this->totalCount++;
+            //         }
+            //     }
+            //     else if(searchField == "LAST_NAME"){
+            //         if(contact.getLastName() == input){
+            //             this->results.push_back(contact);
+            //             this->totalCount++;
+            //         }
+            //     }
+            //     else{
+            //         if(contact.getPhone() == input){
+            //             this->results.push_back(contact);
+            //             this->totalCount++;
+            //         }
+            //     }
+            // }
+            // else{
+            //     int lenOfInput = input.size();
+            //     if(searchField == "FIRST_NAME"){
+            //         if(contact.getFirstName().substr(0, lenOfInput) == input){
+            //             this->results.push_back(contact);
+            //             this->totalCount++;
+            //         }
+            //     }
+            //     else if(searchField == "LAST_NAME"){
+            //         if(contact.getLastName().substr(0, lenOfInput) == input){
+            //             this->results.push_back(contact);
+            //             this->totalCount++;
+            //         }
+            //     }
+            //     else{
+            //         if(contact.getPhone().substr(0, lenOfInput) == input){
+            //             this->results.push_back(contact);
+            //             this->totalCount++;
+            //         }
+            //     }
+            // }
+        }
+    }
+};
+
+class ContactManager{
+public:
+    bool add(Contact contact, string id){
+        if(contactDictionary.find(id)!=contactDictionary.end()){
+            return false;
+        }
+        else{
+            contactDictionary[id] = contact;
+            return true;
+        }
+    }
+
+    bool update(Contact contact, string id){
+        if(contactDictionary.find(id)!=contactDictionary.end()){
+            contactDictionary[id] = contact;
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    SearchResponse search(SearchType searchType, SearchField searchField, string input){
+        SearchResponse response;
+        response.getSearchResponse(searchType, searchField, input);
+        return response;
+    }
+
+};
+
+
+void printSearchResult(SearchResponse searchResponse){
+    cout<<"totalCount : "<<searchResponse.totalCount<<endl;
+    auto contactsArr = searchResponse.results;
+    for(int i=0; i<contactsArr.size(); i++){
+        cout<<contactsArr[i].getFirstName()<<" "<<contactsArr[i].getLastName()<<" "<<contactsArr[i].getPhone()<<endl;
+    }
+
+}
+
+
+
+
+int32_t main(){
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin); freopen("output.txt", "w", stdout);
+#endif
+    IOS;
+// ######### Cook_your_code_here #########
+    // cout<<"hello world sachan"<<endl;
+
+    // "searchType = COMPLETE"
+    Contact contact;
+    contact.setFirstName("shivam");
+    contact.setLastName("sachan");
+    contact.setPhone("999999");
+
+    cout<<contact.getFirstName()<<" "<<contact.getLastName()<<" "<<contact.getPhone()<<endl;
+
+
+
+    ContactManager contactManager;
+
+    cout<<contactManager.add(contact, "id1")<<endl;
+
+    cout<<contactManager.add(contact, "id2")<<endl;
+
+
+    Contact contact1;
+    contact1.setFirstName("sk");
+    contact1.setLastName("K");
+    contact1.setPhone("9999980");
+
+
+    cout<<contactManager.update(contact1, "id2")<<endl;
+
+    cout<<contactDictionary.size()<<endl;
+
+    cout<<contactDictionary["id2"].getPhone()<<endl;
+
+
+    // auto res = contactManager.search(COMPLETE, FIRST_NAME, "shivam");
+    // auto res = contactManager.search(PARTIAL, FIRST_NAME, "s");
+
+    auto res = contactManager.search(COMPLETE, LAST_NAME, "sachan");
+    // auto res = contactManager.search(PARTIAL, LAST_NAME, "s");
+
+    // auto res = contactManager.search(COMPLETE, PHONE, "999999");
+    // auto res = contactManager.search(PARTIAL, PHONE, "99");
+
+
+    printSearchResult(res);
+
+    
+    
+    return 0;
+}
+
